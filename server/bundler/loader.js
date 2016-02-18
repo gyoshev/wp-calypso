@@ -86,7 +86,7 @@ function splitTemplate( path, module, chunkName ) {
 		'		context.store.dispatch( { type: "SET_SECTION", isLoading: false } );',
 		'		if ( ! _loadedSections[ ' + JSON.stringify( module ) + ' ] ) {',
 		'			require( ' + JSON.stringify( module ) + ' )( page );',
-		'			page( controller.renderElements );',
+		'			page( ' + path + ', controller.renderElements );',
 		'			_loadedSections[ ' + JSON.stringify( module ) + ' ] = true;',
 		'		}',
 		'		layoutFocus.next();',
