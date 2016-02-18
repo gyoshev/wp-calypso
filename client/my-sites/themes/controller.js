@@ -132,18 +132,37 @@ export function details( context, next ) {
 		isFullScreen: true
 	} ) );
 
-	// When we're logged in, we need to remove the sidebar.
-	ReactDom.unmountComponentAtNode( document.getElementById( 'secondary' ) );
-
 	context.primary = makeElement( ThemeSheetComponent, Head, context.store, props );
+	context.secondary = null; // When we're logged in, we need to remove the sidebar.
 	next();
 }
 
 // Generic middleware -- move to client/controller.js?
 // lib/react-helpers isn't probably middleware-specific enough
-export function renderPrimary( context ) {
-	ReactDom.render(
-		context.primary,
-		document.getElementById( 'primary' )
-	);
+export function renderElements( context ) {
+	renderPrimary( context );
+	renderSecondary( context );
+}
+
+function renderPrimary( context ) {
+	const { path } = context.params;
+	// FIXME: temporary hack until we have a proper isomorphic, one tree routing solution. Do NOT do this!
+	const sheetsDomElement = startsWith( path, '/themes' ) && document.getElementsByClassName( 'themes__sheet' )[0];
+	if ( ! sheetsDomElement ) {
+		ReactDom.render(
+			context.primary,
+			document.getElementById( 'primary' )
+		);
+	}
+}
+
+function renderSecondary( context ) {
+	if ( context.secondary === null ) {
+		ReactDom.unmountComponentAtNode( document.getElementById( 'secondary' ) );
+	} else if ( context.secondary !== undefined ) {
+		ReactDom.render(
+			context.secondary,
+			document.getElementById( 'secondary' )
+		);
+	}
 }
