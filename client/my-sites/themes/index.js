@@ -11,11 +11,10 @@ const user = userFactory();
 const isLoggedIn = !! user.get();
 const routes = isLoggedIn
 	? {
-		'/design': [ multiSite ],
-		'/design/:site_id': [ singleSite ],
-		'/design/type/:tier': [ multiSite ],
-		'/design/type/:tier/:site_id': [ singleSite ],
-		'/design*': [ navigation, siteSelection ]
+		'/design': [ multiSite, navigation, siteSelection ],
+		'/design/:site_id': [ singleSite, navigation, siteSelection ],
+		'/design/type/:tier': [ multiSite, navigation, siteSelection ],
+		'/design/type/:tier/:site_id': [ singleSite, navigation, siteSelection ],
 	}
 	: {
 		'/design': [ loggedOut ],
