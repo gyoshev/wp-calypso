@@ -19,3 +19,18 @@ const handler = new SyncHandler( wpcomXHRHandler );
 // create wpcom instance passing the wrapped handler
 const wpcom = wpcomUndocumented( handler );
 ```
+
+### Cache Invalidation
+
+`cache-invalidation` attempts cleanup the obsolete records from the local storage of the browser so thus reduce the dB size. The current criteria are two:
+
+### syncHandler#pruneRecordsFrom( [lifetime] );
+Prune records older than the given `lifetime` (in milliseconds). By default the value of the lifetime is `2 days`.
+
+```es6
+// prune the records that are older than one hour of life
+syncHandler.pruneRecordsFrom( 1000 * 60 * 60 );
+```
+
+### syncHandler.clearAll();
+clearAll the whole sync-handler data.
