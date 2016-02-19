@@ -4,6 +4,15 @@
 import ReactDom from 'react-dom';
 import startsWith from 'lodash/startsWith';
 
+/**
+ * Internal dependencies
+ */
+import page from 'page';
+
+export function clientRouter( route, ...mws ) {
+	page( route, ...[ ...mws, renderElements ] );
+}
+
 export function renderElements( context ) {
 	console.log( 'render', context, context.path, context.primary );
 
