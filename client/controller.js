@@ -8,26 +8,31 @@ import startsWith from 'lodash/startsWith';
  * Internal dependencies
  */
 import page from 'page';
+import debugFactory from 'debug';
+
+const debug = debugFactory( 'calypso:controller' );
 
 export function clientRouter( route, ...mws ) {
 	page( route, ...[ ...mws, renderElements ] );
 }
 
 export function renderElements( context ) {
-	console.log( 'render', context, context.path, context.primary );
-
 	renderPrimary( context );
 	renderSecondary( context );
 }
 
 function renderPrimary( context ) {
-	const { path } = context;
-	console.log( 'renderPrimary', context, path, context.primary );
-	// FIXME: temporary hack until we have a proper isomorphic, one tree routing solution. Do NOT do this!
-	const sheetsDomElement = startsWith( path, '/themes' ) && document.getElementsByClassName( 'themes__sheet' )[0];
-	if ( context.primary && ! sheetsDomElement ) {
+	const { path, primary } = context;
+
+	// FIXME: temporary hack until we have a proper isomorphic, one tree
+	// routing solution. Do NOT do this!
+	const sheetsDomElement = startsWith( path, '/themes' ) &&
+		document.getElementsByClassName( 'themes__sheet' )[0];
+
+	if ( primary && ! sheetsDomElement ) {
+		debug( 'Rendering primary', context, path, primary );
 		ReactDom.render(
-			context.primary,
+			primary,
 			document.getElementById( 'primary' )
 		);
 	}
@@ -35,8 +40,10 @@ function renderPrimary( context ) {
 
 function renderSecondary( context ) {
 	if ( context.secondary === null ) {
+		debug( 'Unmounting secondary' );
 		ReactDom.unmountComponentAtNode( document.getElementById( 'secondary' ) );
 	} else if ( context.secondary !== undefined ) {
+		debug( 'Rendering secondary' );
 		ReactDom.render(
 			context.secondary,
 			document.getElementById( 'secondary' )

@@ -22,7 +22,6 @@ const routes = isLoggedIn
 	};
 
 export default function( router ) {
-	console.log( 'route' );
 	if ( config.isEnabled( 'manage/themes' ) ) {
 		// Does iterating over Object.keys preserve order? If it doesn't, use lodash's mapValues
 		Object.keys( routes ).forEach( route => {
