@@ -16,8 +16,7 @@ function renderPrimary( context ) {
 	console.log( 'renderPrimary', context, path, context.primary );
 	// FIXME: temporary hack until we have a proper isomorphic, one tree routing solution. Do NOT do this!
 	const sheetsDomElement = startsWith( path, '/themes' ) && document.getElementsByClassName( 'themes__sheet' )[0];
-	const mainDomElement = startsWith( path, '/design' ) && document.getElementsByClassName( 'themes main' )[0];
-	if ( context.primary && ! sheetsDomElement && ! mainDomElement ) {
+	if ( context.primary && ! sheetsDomElement ) {
 		ReactDom.render(
 			context.primary,
 			document.getElementById( 'primary' )
