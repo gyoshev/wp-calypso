@@ -10,12 +10,7 @@ These are some of the key modules of the application, kept in `client`'s root fo
 * `boot` - the booting file that sets up the application and requires the main sections.
 * `config` - generated configuration settings.
 * `layout` - handles the main React layout, including the masterbar. Notably, it sets #primary and #secondary used to render the different sections.
-* `controller.js` - provides the `clientRouter` function which is passed to
-individual sections' controllers via `server/bundler/loader`. Sections are free
-to either ignore it, or use it instead of directly calling `page` for linking
-routes and middlewares in order to be also usable for server-side rendering
-(and isomorphic routing). `clientRouter` then also renders React elements
-contained in `context.primary`.
+* `controller.js` - isomorphic routing helper, see comments in that file.
 * `sections.js` - defines section groups, paths, and main modules. (Used by webpack to generate separate chunks.)
 
 ### Components
