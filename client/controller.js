@@ -37,7 +37,8 @@ function renderPrimary( context ) {
 	const { path, primary } = context;
 
 	// FIXME: temporary hack until we have a proper isomorphic, one tree
-	// routing solution. Do NOT do this!
+	// routing solution (see https://github.com/Automattic/wp-calypso/pull/3302)
+	// Do NOT do this!
 	const sheetsDomElement = startsWith( path, '/themes' ) &&
 		document.getElementsByClassName( 'themes__sheet' )[0];
 
