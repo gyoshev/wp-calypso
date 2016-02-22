@@ -130,6 +130,10 @@
 			margin-top: 10px;
 		}
 
+		.checkout__purchase-detail-text::before {
+			content: none;
+		}
+
 		.checkout__purchase-detail-title {
 			margin: 0 auto;
 			width: 85%;
@@ -138,6 +142,12 @@
 }
 
 .checkout__purchase-detail-text {
+	&::before {
+		color: lighten( $gray, 20% );
+		@include noticon( '\f803' );
+		top: -8px;
+	}
+
 	@include breakpoint( ">660px" ) {
 		&::before {
 			font-size: 70px;
@@ -153,14 +163,6 @@
 			position: absolute;
 				left: 0;
 		}
-	}
-}
-
-.checkout__purchase-detail:not( .is-placeholder ) .checkout__purchase-detail-text {
-	&::before {
-		color: lighten( $gray, 20% );
-		@include noticon( '\f803' );
-		top: -8px;
 	}
 }
 
