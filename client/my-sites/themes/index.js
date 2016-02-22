@@ -9,7 +9,8 @@ import { singleSite, multiSite, loggedOut, details } from './controller';
 const user = userFactory();
 
 const isLoggedIn = !! user.get();
-const routes = isLoggedIn
+
+const designRoutes = isLoggedIn
 	? {
 		'/design': [ multiSite, navigation, siteSelection ],
 		'/design/:site_id': [ singleSite, navigation, siteSelection ],
@@ -21,14 +22,17 @@ const routes = isLoggedIn
 		'/design/type/:tier': [ loggedOut ]
 	};
 
+const themesRoutes = {
+	'/themes/:slug/:section?/:site_id?': [ details ]
+};
+
+const routes = Object.assign( {},
+	config.isEnabled( 'manage/themes' ) ? designRoutes : {},
+	config.isEnabled( 'manage/themes/details' ) ? themesRoutes : {}
+)
+
 export default function( router ) {
-	if ( config.isEnabled( 'manage/themes' ) ) {
-		// Does iterating over Object.keys preserve order? If it doesn't, use lodash's mapValues
-		Object.keys( routes ).forEach( route => {
-			router( route, ...routes[ route ] );
-		} )
-	}
-	if ( config.isEnabled( 'manage/themes/details' ) ) {
-		router( '/themes/:slug/:section?/:site_id?', details );
-	}
+	Object.keys( routes ).forEach( route => {
+		router( route, ...routes[ route ] );
+	} )
 };
