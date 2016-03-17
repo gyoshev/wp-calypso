@@ -170,23 +170,27 @@ const messages = {
 	}
 };
 
-const PostEditor = React.createClass( {
-	propTypes: {
-		setContent: React.PropTypes.func,
-		setExcerpt: React.PropTypes.func,
-		stopEditing: React.PropTypes.func,
-		setTitle: React.PropTypes.func,
-		setRawContent: React.PropTypes.func,
-		save: React.PropTypes.func,
-		autosave: React.PropTypes.func,
-		setPostPrivate: React.PropTypes.func,
-		setPostPublished: React.PropTypes.func,
-		resetRawContent: React.PropTypes.func,
-		preferences: React.PropTypes.object,
-		sites: React.PropTypes.object
-	},
+class PostEditor extends React.Component {
+	constructor(props) {
+		super(props);
 
-	getDefaultProps: function() {
+		this._previewWindow = null;
+
+		var postEditState = this.getPostEditState();
+		this.state = assign( {}, postEditState, {
+			isSaving: false,
+			isPublishing: false,
+			notice: false,
+			showAutosaveDialog: true,
+			isLoadingAutosave: false,
+			isTitleFocused: false
+		} );
+
+		this.enableTinyMceMode = this.switchEditorMode.bind( this, 'tinymce' )
+		this.enableHtmlMode = this.switchEditorMode.bind( this, 'html' )
+	}
+
+	getDefaultProps() {
 		return {
 			setContent: () => {},
 			setExcerpt: () => {},
@@ -199,27 +203,12 @@ const PostEditor = React.createClass( {
 			setPostPublished: () => {},
 			resetRawContent: () => {}
 		};
-	},
-
-	_previewWindow: null,
+	}
 
 	mixins: [
 		protectForm.mixin,
 		observe( 'sites' )
 	],
-
-	getInitialState: function() {
-		var state = this.getPostEditState();
-
-		return assign( {}, state, {
-			isSaving: false,
-			isPublishing: false,
-			notice: false,
-			showAutosaveDialog: true,
-			isLoadingAutosave: false,
-			isTitleFocused: false
-		} );
-	},
 
 	getPostEditState: function() {
 		return {
@@ -355,13 +344,13 @@ const PostEditor = React.createClass( {
 								<SegmentedControl className="editor__switch-mode" compact={ true }>
 									<SegmentedControlItem
 										selected={ mode === 'tinymce' }
-										onClick={ this.switchEditorMode.bind( this, 'tinymce' ) }
+										onClick={ this.enableTinyMceMode }
 										title={ this.translate( 'Edit with a visual editor' ) }>
 										{ this.translate( 'Visual', { context: 'Editor writing mode' } ) }
 									</SegmentedControlItem>
 									<SegmentedControlItem
 										selected={ mode === 'html' }
-										onClick={ this.switchEditorMode.bind( this, 'html' ) }
+										onClick={ this.enableHtmlMode }
 										title={ this.translate( 'Edit the raw HTML code' ) }>
 										HTML
 									</SegmentedControlItem>
@@ -901,7 +890,22 @@ const PostEditor = React.createClass( {
 		}.bind( this ), 0 );
 	}
 
-} );
+};
+
+PostEditor.propTypes = {
+	setContent: React.PropTypes.func,
+	setExcerpt: React.PropTypes.func,
+	stopEditing: React.PropTypes.func,
+	setTitle: React.PropTypes.func,
+	setRawContent: React.PropTypes.func,
+	save: React.PropTypes.func,
+	autosave: React.PropTypes.func,
+	setPostPrivate: React.PropTypes.func,
+	setPostPublished: React.PropTypes.func,
+	resetRawContent: React.PropTypes.func,
+	preferences: React.PropTypes.object,
+	sites: React.PropTypes.object
+};
 
 export default connect(
 	( state ) => {
