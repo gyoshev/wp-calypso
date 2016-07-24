@@ -1,13 +1,13 @@
 /**
  * External dependencies
  */
-var req = require( 'superagent' ),
-	bodyParser = require( 'body-parser' );
+import req from 'superagent';
+import bodyParser from 'body-parser';
 
 /**
  * Internal dependencies
  */
-var config = require( 'config' );
+import config from 'config';
 
 function oauth() {
 	return {
@@ -17,7 +17,7 @@ function oauth() {
 		wpcom_supports_2fa: true,
 		wpcom_supports_2fa_push_verification: true,
 		grant_type: 'password'
-	}
+	};
 }
 
 /*
@@ -26,7 +26,7 @@ function oauth() {
  */
 function proxyOAuth( request, response ) {
 	// We are making a password request, and want all the 2fa checks enabled
-	var data = Object.assign( {}, {
+	const data = Object.assign( {}, {
 		username: request.body.username,
 		password: request.body.password
 	}, oauth() );
@@ -59,7 +59,7 @@ function checkConnection( serverResponse, fn ) {
 				.json( { error: 'invalid_request', error_description: 'The request to ' + error.host + ' failed (code ' + error.code + '), please check your internet connection and try again.' } );
 		}
 		fn( error, clientResponse );
-	}
+	};
 }
 
 function proxyError( serverResponse, fn ) {
@@ -71,7 +71,7 @@ function proxyError( serverResponse, fn ) {
 				.json( clientResponse.body );
 		}
 		fn( error, clientResponse );
-	}
+	};
 }
 
 function validateOauthResponse( serverResponse, fn ) {
@@ -84,7 +84,7 @@ function logout( request, response ) {
 }
 
 function sms( request, response ) {
-	var data = Object.assign( {}, {
+	const data = Object.assign( {}, {
 		username: request.body.username,
 		password: request.body.password,
 		wpcom_resend_otp: true
@@ -94,9 +94,9 @@ function sms( request, response ) {
 		.type( 'form' )
 		.send( data )
 		.end( validateOauthResponse( response, function( error, res ) {
-			response.json( res.body )
+			response.json( res.body );
 		} ) );
-};
+}
 
 module.exports = function( app ) {
 	return app
@@ -104,4 +104,4 @@ module.exports = function( app ) {
 		.post( '/oauth', proxyOAuth )
 		.get( '/logout', logout )
 		.post( '/sms', sms );
-}
+};
