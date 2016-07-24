@@ -11,9 +11,9 @@ var config = require( 'config' );
 
 function oauth() {
 	return {
-		client_id: config( 'desktop_oauth_client_id' ),
-		client_secret: config( 'desktop_oauth_client_secret' ),
-		client_name: config( 'desktop_oauth_client_name' ),
+		client_id: config( 'oauth_client_id' ),
+		client_secret: config( 'oauth_client_secret' ),
+		client_name: config( 'oauth_client_name' ),
 		wpcom_supports_2fa: true,
 		wpcom_supports_2fa_push_verification: true,
 		grant_type: 'password'
@@ -42,7 +42,7 @@ function proxyOAuth( request, response ) {
 		data.wpcom_user_id = request.body.user_id;
 	}
 
-	req.post( config( 'desktop_oauth_token_endpoint' ) )
+	req.post( config( 'oauth_token_endpoint' ) )
 		.type( 'form' )
 		.send( data )
 		.end( validateOauthResponse( response, function( error, res ) {
@@ -90,7 +90,7 @@ function sms( request, response ) {
 		wpcom_resend_otp: true
 	}, oauth() );
 
-	req.post( config( 'desktop_oauth_token_endpoint' ) )
+	req.post( config( 'oauth_token_endpoint' ) )
 		.type( 'form' )
 		.send( data )
 		.end( validateOauthResponse( response, function( error, res ) {
